@@ -1,0 +1,192 @@
+<link href="https://cdn.bootcdn.net/ajax/libs/mdui/1.0.2/css/mdui.min.css" rel="stylesheet">
+<script src="https://cdn.bootcdn.net/ajax/libs/mdui/1.0.2/js/mdui.min.js"></script>
+<script src="js/words.js"></script>
+<meta charset="UTF-8">
+</meta>
+<title>3500词记忆工具</title>
+<body id="body" class="mdui-theme-primary-light-blue mdui-theme-accent-blue">
+	<div class="mdui-container">
+		<div class="mdui-col-sm-12 mdui-col-md-8 mdui-col-offset-md-2 ">
+			<div class="mdui-toolbar">
+				<span class="mdui-typo-title">3500词记忆工具</span>
+				<div class="mdui-toolbar-spacer"></div>
+				<span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '夜间模式'}"
+					onclick="changebrightness()">
+					<i class="mdui-icon material-icons">brightness_2</i>
+				</span>
+			</div>
+			<div class="mdui-tab" mdui-tab>
+				<a href="#write" class="mdui-ripple">单词拼写</a>
+				<a href="#choose" class="mdui-ripple">四选一</a>
+				<a href="#dict" class="mdui-ripple">单词查询</a>
+				<a href="#about" class="mdui-ripple">关于</a>
+			</div>
+			<div id="write" class="mdui-p-a-2">
+				<div id="write_select_panel" class="mdui-card">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">选项</div>
+					</div>
+					<div class="mdui-card-actions">
+						<label class="mdui-switch">
+							<input type="checkbox"  id="is_rangeselector_enabled" />
+							<i class="mdui-switch-icon "></i>
+							开启听写区间选择
+						</label>
+					<div>
+						<label class="mdui-slider mdui-slider-discrete">
+						<input id="write_range_start" value="20" type="range" step="5" min="5" max="3630" >
+					</label>
+					<label class="mdui-slider mdui-slider-discrete">
+						<input id="write_range_end"value="20" type="range" step="5" min="5" max="3630">
+					</label>
+					</div>
+						<label class="mdui-switch">
+							<input type="checkbox"  id="is_wrongtimeselector_enabled" />
+							<i class="mdui-switch-icon "></i>
+						</label>
+						错误
+						<select class="mdui-select" id="wrongtimeselector">
+							<option value="1">1</option>
+							<option value="2" selected>2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+						次后提示正确答案
+						<label class="mdui-slider mdui-slider-discrete">
+							<p id="write_show_count">听写单词数量:20</p>
+							<input id="words_count_bar" value="20" type="range" step="5" min="5" max="100" />
+						</label>
+						<button id="write_start"
+							class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block">开始听写</button>
+					</div>
+				</div>
+				<p></p>
+				<div id="write_panel" class="mdui-card" style="display: none;">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">单词拼写</div>
+					</div>
+					<div class="mdui-card-actions">
+						<center>
+							<div id="show">中文</div>
+						</center>
+						<div class="mdui-textfield">
+							<input id="usersinput" class="mdui-textfield-input" type="text" placeholder="Word" />
+						</div>
+						<button onclick="shownext()" class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block"
+							id="confirm">确定</button>
+					</div>
+				</div>
+				<div id="write_result_panel" class="mdui-card" style="display: none;">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">成绩面板</div>
+					</div>
+					<div class="mdui-card-actions">
+						<center>
+							<div id="write_right_rate_div">正确率:</div>
+						</center>
+						<ul class="mdui-list" id="words_wrong_list">
+						</ul>
+						<button id="write_again"
+							class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block">再听一组</button>
+					</div>
+				</div>
+			</div>
+			<div id="choose" class="mdui-p-a-2">
+				<div id="choose_select_panel" class="mdui-card">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">选项</div>
+					</div>
+					<div class="mdui-card-actions">
+						看中文选英文
+						<label class="mdui-switch">
+							<input type="checkbox" class="mdui-color-theme" id="getlangselector" />
+							<i class="mdui-switch-icon mdui-color-theme"></i>
+						</label>
+						看英文选中文
+						<label class="mdui-slider mdui-slider-discrete">
+							<p id="choose_show_count">题目数量:20</p>
+								<input id="choose_count_bar" value="20" type="range" step="5" min="5" max="100"/>
+							  </label>
+							  <button id="choose_start" class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block">开始听写</button>
+					
+					</div>
+				</div>
+				<p></p>
+				<div class="mdui-card" id="choose_panel" style="display:none;">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">四选一</div>
+					</div>
+					<div class="mdui-card-actions">
+						<center>
+							<div id="choose_show">待选词</div>
+						</center>
+						<div class="mdui-row-xs-2">
+							<div class="mdui-col">
+								<button onclick="chooseword(1)"
+									class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block"
+									id="choosebutton1">选项1</button>
+							</div>
+							<div class="mdui-col">
+								<button onclick="chooseword(2)"
+									class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block"
+									id="choosebutton2">选项2</button>
+							</div>
+						</div>
+						<p></p>
+						<div class="mdui-row-xs-2">
+							<div class="mdui-col">
+								<button onclick="chooseword(3)"
+									class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block"
+									id="choosebutton3">选项3</button>
+							</div>
+							<div class="mdui-col">
+								<button onclick="chooseword(4)"
+									class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block"
+									id="choosebutton4">选项4</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="choose_result_panel" class="mdui-card" style="display: none;">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">成绩面板</div>
+					</div>
+					<div class="mdui-card-actions">
+						<center>
+							<div id="choose_right_rate_div">正确率:</div>
+						</center>
+						<ul class="mdui-list" id="choose_wrong_list">
+						</ul>
+						<button id="choose_again"
+							class="mdui-btn mdui-btn-raised mdui-color-theme mdui-btn-block">再听一组</button>
+					</div>
+				</div>
+			</div>
+			<div id="dict" class="mdui-p-a-2">
+				<div class="mdui-card">
+					<div class="mdui-card-header">
+						<div class="mdui-card-header-title">单词查询</div>
+					</div>
+					<div class="mdui-card-actions">
+						<div class="mdui-textfield">
+							<input id="dict_input" class="mdui-textfield-input" type="text" placeholder="Word" />
+						</div>
+						<ul class="mdui-list" id="dict_list">
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="about" class="mdui-p-a-2">
+				<p>2021.7.12 正式部署 上线了四选一和单词拼写功能 且单词表不齐</p>
+				<p>2022.1.11 添加3500词词库 修复部分bug 迁移至mdui 1.0.2</p>
+				<p>2022.1.12 增加单词查询功能 重构部分代码</p>
+				<p>2022.1.15 剥离js文件 新增听写结算</p>
+				<p>2022.1.16 新增四选一结算</p>
+				<p>2022.1.19 新增写错单词后是否提示选项 修复bug</p>
+			</div>
+			<button id="check" class="mdui-btn mdui-btn-raised mdui-color-theme">输出调试数据</button>
+		</div>
+	</div>
+</body>
+<script src="js/main.js"></script>
